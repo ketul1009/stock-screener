@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stock_market_filter/AppPages/FilterPage.dart';
 import 'package:stock_market_filter/AppPages/LoginPage.dart';
+import 'package:stock_market_filter/AppPages/SignUpPage.dart';
+import 'package:stock_market_filter/AppPages/HomePage.dart';
+import 'package:stock_market_filter/AppPages/AccountPage.dart';
+import 'package:stock_market_filter/AppPages/WatchlistPage.dart';
 
-import 'AppPages/AccountPage.dart';
-import 'AppPages/Home.dart';
-
+import 'AppPages/ResultsPage.dart';
 void main() {
 
   final GoRouter router = GoRouter(
@@ -16,6 +18,13 @@ void main() {
           path: '/',
           builder: (BuildContext context, GoRouterState state) {
             return const LoginPage();
+          }
+      ),
+      GoRoute(
+          name: 'signup',
+          path: '/signup',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SignUpPage();
           }
       ),
       GoRoute(
@@ -39,13 +48,20 @@ void main() {
             return const FilterPage();
           }
       ),
-      /*GoRoute(
+      GoRoute(
+          name: 'watchlist',
+          path: '/watchlist',
+          builder: (BuildContext context, GoRouterState state) {
+            return const WatchlistPage();
+          }
+      ),
+      GoRoute(
           name: 'results',
           path: '/results',
           builder: (BuildContext context, GoRouterState state) {
-            return ResultPage();
+            return const ResultsPage();
           }
-      ),*/
+      ),
     ],
   );
 
@@ -53,9 +69,8 @@ void main() {
     MaterialApp.router(
       routerConfig: router,
       title: 'Stock Trading App',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
+      theme: ThemeData.dark(),
+      darkTheme: ThemeData.dark(),
     )
   );
 }

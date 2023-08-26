@@ -1,38 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatelessWidget {
+  const SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: LoginForm(),
+        child: SignUpForm(),
       ),
     );
   }
 }
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class SignUpForm extends StatefulWidget {
+  const SignUpForm({super.key});
 
   @override
-  LoginFormState createState() => LoginFormState();
+  SignUpFormState createState() => SignUpFormState();
 }
 
-class LoginFormState extends State<LoginForm> {
+class SignUpFormState extends State<SignUpForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
-  void _login() {
-    // Perform login logic here
+  void _signUp() {
+    // Perform sign-up logic here
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    debugPrint("Email: $email");
-    debugPrint("password: $password");
-    context.go("/home");
+    // TODO: Implement your sign-up validation and navigation logic
   }
 
   @override
@@ -46,7 +45,7 @@ class LoginFormState extends State<LoginForm> {
           Image.asset('images/logo.png',
             height: 140,),
           const SizedBox(height: 16.0),
-          const Text("Sign in to Stock Screener", style: TextStyle(fontSize: 20),),
+          const Text("Create new Account", style: TextStyle(fontSize: 20),),
           const SizedBox(height: 16.0),
           TextFormField(
             controller: _emailController,
@@ -62,20 +61,25 @@ class LoginFormState extends State<LoginForm> {
             ),
             obscureText: true,
           ),
-          TextButton(
-              onPressed: (){},
-              child: const Text("Forgot password?")),
           const SizedBox(height: 16.0),
+          TextFormField(
+            controller: _confirmPasswordController,
+            decoration: const InputDecoration(
+              labelText: 'Confirm Password',
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 24.0),
           ElevatedButton(
-            onPressed: _login,
-            child: const Text('Login'),
+            onPressed: _signUp,
+            child: const Text('Sign Up'),
           ),
           const SizedBox(height: 16.0),
           TextButton(
               onPressed: (){
-                context.go("/signup");
+                context.go("/");
               },
-              child: const Text("Don't have an account? Create new")),
+              child: const Text("Already have an account? Sign in")),
         ],
       ),
     );
