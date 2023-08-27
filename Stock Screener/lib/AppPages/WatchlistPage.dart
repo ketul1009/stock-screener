@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:stock_market_filter/Constants/StockData.dart';
+import 'package:stock_market_filter/Models/Watchlist.dart';
 
 class WatchlistPage extends StatefulWidget{
   const WatchlistPage({super.key});
@@ -10,14 +13,31 @@ class WatchlistPage extends StatefulWidget{
 }
 
 class WatchlistPageState extends State<WatchlistPage>{
-  List<String> s = stocks.keys.toList();
+
+
+  //int serialNo=1;
   @override
   Widget build(BuildContext context){
+    WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
+    Watchlist watchlist = watchlistProvider.watchlist;
+    int serialNo = 1;
     return Scaffold(
         appBar: AppBar(
           actions: [
-            Image.asset('images/logo.png',
-              height: 100,),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Image.asset('images/logo.png',
+                height: 100,),
+            ),
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: TextButton(
+                  onPressed: (){
+                    context.go("/screener");
+                  },
+                  child: const Text("Screener"),
+                )
+            ),
           ],
           elevation: 2,
           //backgroundColor: Colors.black45,
@@ -33,30 +53,52 @@ class WatchlistPageState extends State<WatchlistPage>{
                     const SizedBox(width: 100,),
                     Padding(
                       padding: const EdgeInsets.all(20),
-                      child: Text("${s.length} Stocks in watchlist", style: const TextStyle(fontSize: 20),),
+                      child: Text("${watchlist.watchlist.length} in watchlist", style: const TextStyle(fontSize: 20),),
                     )
                   ]
               ),
-              SizedBox(
-                  height: 600,
-                  //width: 300,
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(3),
-                    itemCount: stocks.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      String stock = s[index];
-                      int price = stocks[stock]![0];
-                      return SizedBox(
-                        height: 30,
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 30,),
-                            Text(stock)],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) => const Divider(),
-                  )
+              DataTable(
+                  showCheckboxColumn: false,
+                  columns: const [
+                    DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                    DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                  ],
+                  rows: watchlist.watchlist.map(
+                          (stock) {
+                            return DataRow(
+                                cells: [
+                                  DataCell(
+                                    Text((serialNo++).toString()),
+                                    showEditIcon: false,
+                                    placeholder: false,
+                                  ),
+                                  DataCell(
+                                    Text((stock[0]).toString()),
+                                    showEditIcon: false,
+                                    placeholder: false,
+                                  ),
+                                  DataCell(
+                                    Text((stock[1]).toString()),
+                                    showEditIcon: false,
+                                    placeholder: false,
+                                  ),
+                                  DataCell(
+                                    TextButton(
+                                      onPressed: (){
+                                        watchlist.watchlist.remove(stock);
+                                        watchlistProvider.setWatchlist(watchlist);
+                                      },
+                                      child: const Text("Remove from Watchlist"),
+                                    ),
+                                    showEditIcon: false,
+                                    placeholder: false,
+                                  ),
+                                ]
+                            );
+                          }
+                  ).toList()
               )
             ],
           ),

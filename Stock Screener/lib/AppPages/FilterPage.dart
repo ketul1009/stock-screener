@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:stock_market_filter/Models/Watchlist.dart';
 
 import '../Common/CustomDrawer.dart';
 
@@ -32,6 +34,8 @@ class FilterPageState extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
+    WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
+    Watchlist watchlist = watchlistProvider.watchlist;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(

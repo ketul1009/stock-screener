@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:stock_market_filter/AppPages/FilterPage.dart';
 import 'package:stock_market_filter/AppPages/LoginPage.dart';
 import 'package:stock_market_filter/AppPages/SignUpPage.dart';
@@ -8,6 +9,7 @@ import 'package:stock_market_filter/AppPages/AccountPage.dart';
 import 'package:stock_market_filter/AppPages/WatchlistPage.dart';
 
 import 'AppPages/ResultsPage.dart';
+import 'Models/Watchlist.dart';
 void main() {
 
   final GoRouter router = GoRouter(
@@ -42,8 +44,8 @@ void main() {
           }
       ),
       GoRoute(
-          name: 'filter',
-          path: '/filter',
+          name: 'screener',
+          path: '/screener',
           builder: (BuildContext context, GoRouterState state) {
             return const FilterPage();
           }
@@ -66,11 +68,14 @@ void main() {
   );
 
   runApp(
-    MaterialApp.router(
-      routerConfig: router,
-      title: 'Stock Trading App',
-      theme: ThemeData.dark(),
-      darkTheme: ThemeData.dark(),
+    ChangeNotifierProvider<WatchlistProvider>(
+      create: (context) => WatchlistProvider(Watchlist([])),
+      child: MaterialApp.router(
+        routerConfig: router,
+        title: 'Stock Trading App',
+        theme: ThemeData.dark(),
+        darkTheme: ThemeData.dark(),
+      )
     )
   );
 }
