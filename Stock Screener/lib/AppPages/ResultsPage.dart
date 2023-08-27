@@ -33,6 +33,15 @@ class ResultsPageState extends State<ResultsPage>{
               height: 100,),
           ),
           Padding(
+              padding: const EdgeInsets.all(5),
+              child: TextButton(
+                onPressed: (){
+                  context.go("/home");
+                },
+                child: const Text("Home"),
+              )
+          ),
+          Padding(
             padding: const EdgeInsets.all(5),
             child: TextButton(
               onPressed: (){

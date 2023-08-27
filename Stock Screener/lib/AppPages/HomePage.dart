@@ -18,7 +18,17 @@ class HomePageState extends State<HomePage>{
     Watchlist watchlist = watchlistProvider.watchlist;
     return Scaffold(
         appBar: AppBar(
-          //title: const Text('Home'),
+          actions: [
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: TextButton(
+                  onPressed: (){
+                    context.go("/account");
+                  },
+                  child: const Text("Account"),
+                )
+            ),
+          ],
         ),
         body: Center(
           child: Column(

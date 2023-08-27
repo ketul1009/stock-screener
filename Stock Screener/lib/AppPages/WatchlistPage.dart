@@ -33,6 +33,15 @@ class WatchlistPageState extends State<WatchlistPage>{
                 padding: const EdgeInsets.all(5),
                 child: TextButton(
                   onPressed: (){
+                    context.go("/home");
+                  },
+                  child: const Text("Home"),
+                )
+            ),
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: TextButton(
+                  onPressed: (){
                     context.go("/screener");
                   },
                   child: const Text("Screener"),

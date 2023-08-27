@@ -38,16 +38,18 @@ class FilterPageState extends State<FilterPage> {
     Watchlist watchlist = watchlistProvider.watchlist;
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.menu, size: 50, color: Colors.black),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-          elevation: 2,
-          backgroundColor: Colors.white,
+          actions: [
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: TextButton(
+                  onPressed: (){
+                    context.go("/home");
+                  },
+                  child: const Text("Home"),
+                )
+            ),
+          ],
         ),
-        drawer: const CustomDrawer(),
         body: Center(
           child:
           Column(

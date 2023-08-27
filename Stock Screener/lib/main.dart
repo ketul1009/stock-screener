@@ -33,7 +33,7 @@ void main() {
           name: 'account',
           path: '/account',
           builder: (BuildContext context, GoRouterState state) {
-            return const AccountPage();
+            return const AccountPage(username: "Name", email: "Email", mobile: "Mobile");
           }
       ),
       GoRoute(
@@ -71,6 +71,7 @@ void main() {
     ChangeNotifierProvider<WatchlistProvider>(
       create: (context) => WatchlistProvider(Watchlist([])),
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: router,
         title: 'Stock Trading App',
         theme: ThemeData.dark(),
