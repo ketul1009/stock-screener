@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_market_filter/AppPages/FilterPage.dart';
 import 'package:stock_market_filter/Common/Toast.dart';
-import 'package:stock_market_filter/Constants/StockData.dart';
-
 import '../Models/Watchlist.dart';
 
 class ResultsPage extends StatefulWidget{
@@ -18,6 +17,7 @@ class ResultsPage extends StatefulWidget{
 class ResultsPageState extends State<ResultsPage>{
 
   String watchlistButton = "Add to Watchlist";
+  List<List<dynamic>> stocks = filtered;
 
   @override
   Widget build(BuildContext context){
@@ -80,6 +80,7 @@ class ResultsPageState extends State<ResultsPage>{
                           DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
                           DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
                           DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                          DataColumn(label: Text("Change", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
                           DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
                         ],
                         rows: stocks.map(
@@ -96,7 +97,12 @@ class ResultsPageState extends State<ResultsPage>{
                                     placeholder: false,
                                   ),
                                   DataCell(
-                                    Text((stock[1]).toString()),
+                                    Text((stock[1]).toStringAsFixed(2).toString()),
+                                    showEditIcon: false,
+                                    placeholder: false,
+                                  ),
+                                  DataCell(
+                                    Text((stock[2]).toStringAsFixed(2).toString()),
                                     showEditIcon: false,
                                     placeholder: false,
                                   ),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:stock_market_filter/Models/Watchlist.dart';
 import 'package:http/http.dart' as http;
 import '../Common/CustomDrawer.dart';
+
+List<List<dynamic>> filtered = [];
 
 class FilterPage extends StatefulWidget{
   const FilterPage({super.key});
@@ -19,25 +22,41 @@ class FilterPageState extends State<FilterPage> {
   bool drawerOpen = false;
   List<String> universe = [
     "Select stock universe",
-    "Nifty 50",
-    "Nifty 100",
-    "Nifty 500",
-    "Nifty Next 50"
+    "Nifty 50"
   ];
   List<String> strategy = [
     "Select strategy",
     "EMA Crossover",
-    "RSI",
+    "RSI - Oversold",
+    "RSI - Overbought",
   ];
   String selectedUniverse = "Select stock universe";
   String selectedStrategy = "Select strategy";
+  List<dynamic> stocks = [];
 
   void _search() async {
     final url = Uri.parse("https://0uzp72ur4a.execute-api.ap-south-1.amazonaws.com/dev/stockscreener/stocks");
     var res = await http.get(
       url,
     );
-    debugPrint(res.statusCode.toString());
+    var data = json.decode(res.body);
+    var temp = data["payload"][0]["data"];
+    setState(() {
+      stocks=temp;
+    });
+    _emaCrossover(stocks);
+    context.go("/results");
+  }
+  void _emaCrossover(List<dynamic> stocks){
+    filtered = [];
+    Watchlist temp = Watchlist([]);
+    for(var stock in stocks){
+      for(var key in stock.keys){
+        if(stock[key]["EMA20"]>stock[key]["EMA50"]){
+          filtered.add([key, stock[key]["close"], stock[key]["change"], "EMA Crossover"]);
+        }
+      }
+    }
   }
 
   @override
@@ -109,7 +128,7 @@ class FilterPageState extends State<FilterPage> {
               ElevatedButton(
                 onPressed: () {
                   _search();
-                  context.go("/results");
+                  //context.go("/results");
                 },
                 child: const Text('Search'),
               ),

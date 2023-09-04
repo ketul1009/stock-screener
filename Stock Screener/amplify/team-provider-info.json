@@ -15,7 +15,7 @@
       "function": {
         "stockscreener": {
           "deploymentBucketName": "amplify-stockscreener-dev-224724-deployment",
-          "s3Key": "amplify-builds/stockscreener-5a74554d4143782b4449-build.zip"
+          "s3Key": "amplify-builds/stockscreener-413937684b6f594d6278-build.zip"
         }
       },
       "api": {

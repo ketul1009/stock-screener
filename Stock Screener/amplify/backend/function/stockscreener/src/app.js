@@ -36,11 +36,7 @@ const client = new MongoClient(url, options);
 
 app.get('/stockscreener/stocks', function(req, res) {
   // Add your code here
-  db = client.mydatabase
-  collection = db.stockdata
-
-  var data = await collection.find({'stocks':'nifty50'}).toArray();
-  res.json({payload: data[0]["data"], url: req.url});
+  getData(req, res);
 });
 
 app.get('/stockscreener/*', function(req, res) {
@@ -117,7 +113,7 @@ async function login(req, res){
       res.send('false');
     }
   } catch (error) {
-    console.log(error);
+    res.send(error);
   }
 
 }
@@ -134,6 +130,19 @@ async function signup(req, res){
     console.log(error);
   }
 
+}
+
+async function getData(req, res){
+  
+  try {
+    await client.connect();
+    var dbo = client.db('mydatabase');
+    var collection = dbo.collection('stockdata');
+    var data = await collection.find({'stocks':'nifty50'}).toArray();
+    res.json({payload: data});
+  } catch (error) {
+    res.send(error);
+  }
 }
 
 // Export the app object. When executing the application local this does nothing. However,
