@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:stock_market_filter/Constants/StockData.dart';
 import 'package:stock_market_filter/Models/Watchlist.dart';
 
 class WatchlistPage extends StatefulWidget{
@@ -66,49 +65,69 @@ class WatchlistPageState extends State<WatchlistPage>{
                     )
                   ]
               ),
-              DataTable(
-                  showCheckboxColumn: false,
-                  columns: const [
-                    DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                    DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                  ],
-                  rows: watchlist.watchlist.map(
-                          (stock) {
-                            return DataRow(
-                                cells: [
-                                  DataCell(
-                                    Text((serialNo++).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    Text((stock[0]).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    Text((stock[1]).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    TextButton(
-                                      onPressed: (){
-                                        watchlist.watchlist.remove(stock);
-                                        watchlistProvider.setWatchlist(watchlist);
-                                      },
-                                      child: const Text("Remove from Watchlist"),
-                                    ),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                ]
-                            );
-                          }
-                  ).toList()
-              )
+              Row(
+                  children: [
+                    const SizedBox(width: 80,),
+                    Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: DataTable(
+                            showCheckboxColumn: false,
+                            columns: const [
+                              DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("Change", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("Strategy", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                            ],
+                            rows: watchlist.watchlist.map(
+                                    (stock) {
+                                  return DataRow(
+                                      cells: [
+                                        DataCell(
+                                          Text((serialNo++).toString()),
+                                          showEditIcon: false,
+                                          placeholder: false,
+                                        ),
+                                        DataCell(
+                                          Text((stock[0]).toString()),
+                                          showEditIcon: false,
+                                          placeholder: false,
+                                        ),
+                                        DataCell(
+                                          Text((stock[1]).toStringAsFixed(2).toString()),
+                                          showEditIcon: false,
+                                          placeholder: false,
+                                        ),
+                                        DataCell(
+                                          Text((stock[2]).toStringAsFixed(2).toString()),
+                                          showEditIcon: false,
+                                          placeholder: false,
+                                        ),
+                                        DataCell(
+                                          Text((stock[3])),
+                                          showEditIcon: false,
+                                          placeholder: false,
+                                        ),
+                                        DataCell(
+                                          TextButton(
+                                            onPressed: (){
+                                              watchlist.watchlist.remove(stock);
+                                              watchlistProvider.setWatchlist(watchlist);
+                                            },
+                                            child: const Text("Remove from Watchlist"),
+                                          ),
+                                          showEditIcon: false,
+                                          placeholder: false,
+                                        ),
+                                      ]
+                                  );
+                                }
+                            ).toList()
+                        )
+                    )
+                  ]
+              ),
             ],
           ),
         )
