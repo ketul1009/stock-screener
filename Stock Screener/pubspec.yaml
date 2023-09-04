@@ -39,6 +39,20 @@ dependencies:
   flutter_octicons: any
   provider: any
   fluttertoast: any
+  cached_network_image: ^3.2.1
+  flutter_hooks: ^0.18.5+1
+  flutter_riverpod: ^1.0.4
+  hooks_riverpod: ^1.0.4
+  image_picker: ^0.8.5+3
+  intl: ^0.17.0
+  amplify_api: ^0.6.0
+  amplify_auth_cognito: ^0.6.0
+  amplify_authenticator: ^0.2.2
+  amplify_datastore: ^0.6.0
+  amplify_flutter: ^0.6.0
+  amplify_storage_s3: ^0.6.0
+  http : any
+  jumping_dot: any
 
 dev_dependencies:
   flutter_test:

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_market_filter/Models/Watchlist.dart';
-
+import 'package:http/http.dart' as http;
 import '../Common/CustomDrawer.dart';
 
 class FilterPage extends StatefulWidget{
@@ -31,6 +31,14 @@ class FilterPageState extends State<FilterPage> {
   ];
   String selectedUniverse = "Select stock universe";
   String selectedStrategy = "Select strategy";
+
+  void _search() async {
+    final url = Uri.parse("https://0uzp72ur4a.execute-api.ap-south-1.amazonaws.com/dev/stockscreener/stocks");
+    var res = await http.get(
+      url,
+    );
+    debugPrint(res.statusCode.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +108,7 @@ class FilterPageState extends State<FilterPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
+                  _search();
                   context.go("/results");
                 },
                 child: const Text('Search'),

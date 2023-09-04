@@ -68,16 +68,15 @@ void main() {
   );
 
   runApp(
-    ChangeNotifierProvider<WatchlistProvider>(
-      create: (context) => WatchlistProvider(Watchlist([])),
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        routerConfig: router,
-        title: 'Stock Trading App',
-        theme: ThemeData.dark(),
-        darkTheme: ThemeData.dark(),
+      ChangeNotifierProvider<WatchlistProvider>(
+          create: (context) => WatchlistProvider(Watchlist([])),
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: router,
+            title: 'Stock Trading App',
+            theme: ThemeData.dark(),
+            darkTheme: ThemeData.dark(),
+          )
       )
-    )
   );
 }
-
