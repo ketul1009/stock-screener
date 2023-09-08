@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_market_filter/Models/Watchlist.dart';
 import 'package:http/http.dart' as http;
-import '../Common/CustomDrawer.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 
 List<List<dynamic>> filtered = [];
 
@@ -33,8 +33,16 @@ class FilterPageState extends State<FilterPage> {
   String selectedUniverse = "Select stock universe";
   String selectedStrategy = "Select strategy";
   List<dynamic> stocks = [];
+  Widget libChild = const Text("Log In");
 
   void _search() async {
+    setState(() {
+      libChild = JumpingDots(
+        color: Colors.white,
+        radius: 5,
+        numberOfDots: 3,
+      );
+    });
     final url = Uri.parse("https://0uzp72ur4a.execute-api.ap-south-1.amazonaws.com/dev/stockscreener/stocks");
     var res = await http.get(
       url,
@@ -45,6 +53,9 @@ class FilterPageState extends State<FilterPage> {
       stocks=temp;
     });
     _emaCrossover(stocks);
+    setState(() {
+      libChild = const Text("Log In");
+    });
     context.go("/results");
   }
   void _emaCrossover(List<dynamic> stocks){
@@ -125,13 +136,16 @@ class FilterPageState extends State<FilterPage> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _search();
-                  //context.go("/results");
-                },
-                child: const Text('Search'),
-              ),
+              SizedBox(
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _search();
+                    //context.go("/results");
+                  },
+                  child: libChild,
+                ),
+              )
             ],
           ),
         )

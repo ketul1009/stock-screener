@@ -39,6 +39,11 @@ app.get('/stockscreener/stocks', function(req, res) {
   getData(req, res);
 });
 
+app.get('/stockscreener/watchlist/:userId', function(req, res) {
+  // Add your code here
+  getWatchlist(req, res);
+});
+
 app.get('/stockscreener/*', function(req, res) {
   // Add your code here
   res.json({success: 'get call succeed!', url: req.url});
@@ -72,9 +77,14 @@ app.put('/stockscreener', function(req, res) {
   res.json({success: 'put call succeed!', url: req.url, body: req.body})
 });
 
-app.put('/stockscreener/*', function(req, res) {
-  // Add your code here
-  res.json({success: 'put call succeed!', url: req.url, body: req.body})
+app.put('/stockscreener/watchlist/:userId', function(req, res) {
+  addToWatchlist(req, res);
+  //res.json({success: 'put call succeed!', url: req.url, body: req.body})
+});
+
+app.put('/stockscreener/removewatchlist/:userId', function(req, res) {
+  removeWatchlist(req, res);
+  //res.json({success: 'put call succeed!', url: req.url, body: req.body})
 });
 
 /****************************
@@ -143,6 +153,105 @@ async function getData(req, res){
   } catch (error) {
     res.send(error);
   }
+}
+
+async function addToWatchlist(req, res){
+
+  try {
+    const userId = req.params.userId;
+
+    await client.connect();
+    const dbo = client.db('mydatabase');
+    const collection = dbo.collection('watchlists');
+    const stock = req.body.stock;
+
+    // Fetch the user's current watchlist
+    const user = await collection.findOne({ userId: userId});
+    if(user==null){
+      await collection.insertOne({userId: userId, watchlist: [stock]});
+      res.json({success: true, message: "Created new watchlist"});
+    }
+    else{
+      var currentWatchlist = user.watchlist || [];
+      if(!contains(currentWatchlist, stock)){
+        currentWatchlist.push(stock);
+        await collection.updateOne({ userId }, { $set: { watchlist: currentWatchlist } });
+        res.json({ success: "Updated watchlist", user: user });
+      }
+      else{
+        res.json({success: "Stock already in watchlist"})
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+async function getWatchlist(req, res){
+  try {
+    const userId = req.params.userId;
+
+    await client.connect();
+    const dbo = client.db('mydatabase');
+    const collection = dbo.collection('watchlists');
+
+    // Fetch the user's current watchlist
+    const user = await collection.findOne({ userId: userId});
+    if(user==null){
+      res.json({watchlist: []});
+    }
+    else{
+      var currentWatchlist = user.watchlist || [];
+      res.json({watchlist: currentWatchlist});
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+async function removeWatchlist(req, res){
+  try {
+    const userId = req.params.userId;
+
+    await client.connect();
+    const dbo = client.db('mydatabase');
+    const collection = dbo.collection('watchlists');
+    const stock = req.body.stock;
+
+    // Fetch the user's current watchlist
+    const user = await collection.findOne({ userId: userId});
+    if(user!=null){
+      var currentWatchlist = user.watchlist || [];
+      if(currentWatchlist.length!=0){
+        const index = getIndex(currentWatchlist, stock);
+        if (index > -1) { // only splice array when item is found
+          currentWatchlist.splice(index, 1); // 2nd parameter means remove one item only
+        }
+        await collection.updateOne({ userId }, { $set: { watchlist: currentWatchlist } });
+        res.json({ success: "Updated watchlist", watchlist: currentWatchlist });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+function contains(currentWatchlist, stockToAdd){
+  for(let i=0; i<currentWatchlist.length; i++){
+    if(currentWatchlist[i].toString()==stockToAdd.toString()){
+      return true;
+    }
+  }
+  return false;
+}
+
+function getIndex(currentWatchlist, toRemove){
+  for(let i=0; i<currentWatchlist.length; i++){
+    if(currentWatchlist[i].toString() == toRemove.toString()){
+      return i;
+    }
+  }
+  return -1;
 }
 
 // Export the app object. When executing the application local this does nothing. However,

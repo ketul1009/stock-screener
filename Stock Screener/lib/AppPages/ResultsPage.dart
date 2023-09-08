@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:stock_market_filter/AppPages/FilterPage.dart';
 import 'package:stock_market_filter/Common/Toast.dart';
 import '../Models/Watchlist.dart';
+import 'package:http/http.dart'as http;
 
 class ResultsPage extends StatefulWidget{
   const ResultsPage({super.key});
@@ -19,6 +22,16 @@ class ResultsPageState extends State<ResultsPage>{
   String watchlistButton = "Add to Watchlist";
   List<List<dynamic>> stocks = filtered;
 
+
+  void _addToWatchlist (List<dynamic> stock) async {
+    final url = Uri.parse("https://0uzp72ur4a.execute-api.ap-south-1.amazonaws.com/dev/stockscreener/watchlist/123");
+    var res = await http.put(
+      url,
+      headers: <String, String>{'Content-Type': 'application/json'},
+      body: json.encode({'stock':stock}),
+    );
+    debugPrint(res.body.toString());
+  }
   @override
   Widget build(BuildContext context){
     WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
@@ -114,6 +127,7 @@ class ResultsPageState extends State<ResultsPage>{
                                         }
                                         else{
                                           watchlist.watchlist.add(stock);
+                                          _addToWatchlist(stock);
                                         }
                                       },
                                       child: Text(watchlistButton),
