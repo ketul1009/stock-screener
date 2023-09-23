@@ -55,7 +55,7 @@ class WatchlistPageState extends State<WatchlistPage>{
           actions: [
             Padding(
               padding: const EdgeInsets.all(5),
-              child: Image.asset('logo.png',
+              child: Image.asset('assets/images/logo.png',
                 height: 100,),
             ),
             Padding(

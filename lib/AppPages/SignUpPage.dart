@@ -73,7 +73,7 @@ class SignUpFormState extends State<SignUpForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset('logo.png',
+          Image.asset('assets/images/logo.png',
             height: 140,),
           const SizedBox(height: 16.0),
           const Text("Create new Account", style: TextStyle(fontSize: 20),),
