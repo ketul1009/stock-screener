@@ -54,6 +54,12 @@ class LoginFormState extends State<LoginForm> {
 
     debugPrint(res.body);
     if(res.body.toString() == "true"){
+      SharedPreferences pref =await SharedPreferences.getInstance();
+      // pref.setString("userId", response['userId']);
+      // pref.setString("name", response['name']);
+      // pref.setString("email", response['email']);
+      // pref.setString("role", response['role']);
+      pref.setBool("session", true);
       setState(() {
         _loggedIn=true;
         libChild = const Text("Log In");

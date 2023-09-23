@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stock_market_filter/AppPages/FilterPage.dart';
 import 'package:stock_market_filter/AppPages/LoginPage.dart';
 import 'package:stock_market_filter/AppPages/SignUpPage.dart';
@@ -10,9 +11,12 @@ import 'package:stock_market_filter/AppPages/WatchlistPage.dart';
 
 import 'AppPages/ResultsPage.dart';
 import 'Models/Watchlist.dart';
-void main() {
-
+Future<void> main() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var session = prefs.getBool("session");
+  debugPrint(session.toString());
   final GoRouter router = GoRouter(
+    initialLocation: session == true ? '/home' : '/',
     navigatorKey: GlobalKey<NavigatorState>(),
     routes: [
       GoRoute(
@@ -66,17 +70,18 @@ void main() {
       ),
     ],
   );
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   runApp(
-      ChangeNotifierProvider<WatchlistProvider>(
-          create: (context) => WatchlistProvider(Watchlist([])),
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            routerConfig: router,
-            title: 'Stock Trading App',
-            theme: ThemeData.dark(),
-            darkTheme: ThemeData.dark(),
-          )
-      )
+    ChangeNotifierProvider<WatchlistProvider>(
+      create: (context) => WatchlistProvider(Watchlist([])),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerConfig: router,
+        title: 'Stock Trading App',
+        theme: ThemeData.dark(),
+        darkTheme: ThemeData.dark(),
+      ),
+    ),
   );
 }
