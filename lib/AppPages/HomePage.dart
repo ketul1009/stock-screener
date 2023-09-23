@@ -37,7 +37,7 @@ class HomePageState extends State<HomePage>{
             children: [
               Container(
                 padding: const EdgeInsets.all(10),
-                child: Image.asset('images/logo.png',
+                child: Image.asset('logo.png',
                   height: 140,),
               ),
               Row(

@@ -42,7 +42,7 @@ class ResultsPageState extends State<ResultsPage>{
         actions: [
           Padding(
             padding: const EdgeInsets.all(5),
-            child: Image.asset('images/logo.png',
+            child: Image.asset('logo.png',
               height: 100,),
           ),
           Padding(

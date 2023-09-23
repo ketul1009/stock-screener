@@ -76,7 +76,7 @@ class LoginFormState extends State<LoginForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset('assets/images/logo.png',
+          Image.asset('logo.png',
             height: 140,),
           const SizedBox(height: 16.0),
           const Text("Sign in to Stock Screener", style: TextStyle(fontSize: 20),),
