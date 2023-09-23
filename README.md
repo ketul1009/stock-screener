@@ -1,16 +1,9 @@
-# stock_market_filter
+# Stock Screener
 
-Stock Market Filter data
+Screen Stocks using technicals
 
-## Getting Started
+## TO DO
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Add custom filters
+Change Account Page
+Change Support for Password Change
