@@ -67,6 +67,20 @@ class LoginFormState extends State<LoginForm> {
       });
     }
     else{
+      if(res.body.toString() == "nouser"){
+        setState(() {
+          _loggedIn=false;
+          libChild = const Text("Log In");
+          errorBox = ErrorBox(error: "No user found");
+        });
+      }
+      else if(res.body.toString() == "false"){
+        setState(() {
+          _loggedIn=false;
+          libChild = const Text("Log In");
+          errorBox = ErrorBox(error: "Invalid Credentials");
+        });
+      }
       setState(() {
         errorBox = ErrorBox(error: "Some error occurred, StatusCode: ${res.statusCode.toString()}");
         libChild = const Text("Log In");

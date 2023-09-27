@@ -112,7 +112,10 @@ async function login(req, res){
     var dbo = client.db('mydatabase');
     var collection = dbo.collection('users');
     var data = await collection.find({'userId':req.body.userId}).toArray();
-    if(data[0]['password']==req.body.password){
+    if(data.length()==0){
+      res.send('nouser');
+    }
+    else if(data[0]['password']==req.body.password){
       console.log("Login successful");
       res.setHeader('Content-Type', 'text/plain');
       res.send('true');
@@ -134,8 +137,14 @@ async function signup(req, res){
     await client.connect();
     var dbo = client.db('mydatabase');
     var collection = dbo.collection('users');
-    await collection.insertOne({userId: req.body.userId, password: req.body.password});
-    res.send("Successfully created user");
+    var data = await collection.find({'userId':req.body.userId}).toArray();
+    if(data.length()!=0){
+      res.send('unavailable');
+    }
+    else{
+      await collection.insertOne({userId: req.body.userId, password: req.body.password});
+      res.send("Successfully created user");
+    }
   } catch (error) {
     console.log(error);
   }
