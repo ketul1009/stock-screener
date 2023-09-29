@@ -59,9 +59,19 @@ class SignUpFormState extends State<SignUpForm> {
       });
       return;
     }
+    else{
+      if(res.body.toString()=='unavailable'){
+        setState(() {
+          errorBox=ErrorBox(error: "Username not available");
+          subChild = const Text("Sign Up");
+        });
+      }
+      else{
+        context.go('/');
+      }
+    }
     setState(() {
       _signedUp=true;
-      context.go('/');
     });
   }
 
@@ -83,7 +93,7 @@ class SignUpFormState extends State<SignUpForm> {
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
-              labelText: 'Email',
+              labelText: 'Username',
             ),
             onTap: (){
               setState(() {
@@ -122,7 +132,7 @@ class SignUpFormState extends State<SignUpForm> {
             onPressed: (){
               if(_emailController.text.isEmpty){
                 setState(() {
-                  errorBox = ErrorBox(error: "Enter Email");
+                  errorBox = ErrorBox(error: "Enter valid username");
                 });
               }
               else if(_passwordController.text != _confirmPasswordController.text){

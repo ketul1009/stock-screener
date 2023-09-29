@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stock_market_filter/AppPages/ChangePasswordForm.dart';
 import 'package:stock_market_filter/AppPages/FilterPage.dart';
 import 'package:stock_market_filter/AppPages/LoginPage.dart';
 import 'package:stock_market_filter/AppPages/SignUpPage.dart';
@@ -66,6 +67,13 @@ Future<void> main() async {
           path: '/results',
           builder: (BuildContext context, GoRouterState state) {
             return const ResultsPage();
+          }
+      ),
+      GoRoute(
+          name: 'changepwd',
+          path: '/account/password',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ChangePasswordPage();
           }
       ),
     ],

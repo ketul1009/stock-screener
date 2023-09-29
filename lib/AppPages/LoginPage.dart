@@ -51,14 +51,12 @@ class LoginFormState extends State<LoginForm> {
       headers: <String, String>{'Content-Type': 'application/json'},
       body: json.encode({'userId': email, 'password': password}),
     );
-
+    var data = jsonDecode(res.body);
     debugPrint(res.body);
-    if(res.body.toString() == "true"){
+    if(data['status'] == "true"){
       SharedPreferences pref =await SharedPreferences.getInstance();
-      // pref.setString("userId", response['userId']);
-      // pref.setString("name", response['name']);
-      // pref.setString("email", response['email']);
-      // pref.setString("role", response['role']);
+      pref.setString("userId", data['userId']);
+      pref.setString("password", data['password']);
       pref.setBool("session", true);
       setState(() {
         _loggedIn=true;
@@ -106,7 +104,7 @@ class LoginFormState extends State<LoginForm> {
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
-              labelText: 'Email',
+              labelText: 'Username',
             ),
             onTap: (){
               setState(() {

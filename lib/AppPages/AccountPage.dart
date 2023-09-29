@@ -37,9 +37,6 @@ class AccountPage extends StatelessWidget {
           children: [
             Text('Username: $username', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
-            Text('Email: $email', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
-            Text('Mobile: $mobile', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
@@ -52,10 +49,7 @@ class AccountPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Navigate to ChangePasswordPage
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
-                );
+                context.go('/account/password');
               },
               child: const Text('Change Password'),
             ),

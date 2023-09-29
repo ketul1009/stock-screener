@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stock_market_filter/Models/Watchlist.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +13,12 @@ class HomePage extends StatefulWidget{
 
 class HomePageState extends State<HomePage>{
 
+
+  void _logOut() async {
+    SharedPreferences pref =await SharedPreferences.getInstance();
+    pref.setBool("session", false);
+  }
+
   @override
   Widget build(BuildContext context){
     WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
@@ -19,6 +26,16 @@ class HomePageState extends State<HomePage>{
     return Scaffold(
         appBar: AppBar(
           actions: [
+            Padding(
+                padding: const EdgeInsets.all(5),
+                child: TextButton(
+                  onPressed: (){
+                    _logOut();
+                    context.go("/");
+                  },
+                  child: const Text("Log out"),
+                )
+            ),
             Padding(
                 padding: const EdgeInsets.all(5),
                 child: TextButton(

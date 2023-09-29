@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../Common/ErrorBox.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -8,10 +11,16 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
-  final _formKey = GlobalKey<FormState>();
-  late String currentPassword;
-  late String newPassword;
-  late String confirmPassword;
+  final TextEditingController _currentPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  Widget libChild = const Text("Save Password");
+  Widget errorBox = Container();
+
+  void _changePassword() async {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,71 +31,86 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       body: Center(
         child: SizedBox(
           width: 300,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextFormField(
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Current Password'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your current password';
-                    }
-                    // Add your validation logic here
-                    return null;
-                  },
-                  onSaved: (value) {
-                    currentPassword = value!;
-                  },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              errorBox,
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _currentPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Old password',
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'New Password'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a new password';
-                    }
-                    // Add your validation logic here
-                    return null;
-                  },
-                  onSaved: (value) {
-                    newPassword = value!;
-                  },
+                onTap: (){
+                  setState(() {
+                    errorBox=Container();
+                  });
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _newPasswordController,
+                decoration: const InputDecoration(
+                  labelText: 'New Password',
                 ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Confirm Password'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please confirm your new password';
-                    }
-                    if (value != newPassword) {
-                      return 'Passwords do not match';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    confirmPassword = value!;
-                  },
+                obscureText: true,
+                onTap: (){
+                  setState(() {
+                    errorBox=Container();
+                  });
+                },
+              ),
+              const SizedBox(height: 16.0),
+              TextFormField(
+                controller: _confirmPasswordController,
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-                      // Code to submit and update password
-                      // You can show a success message or navigate back to the account page
-                      Navigator.pop(context); // Return to the previous page
-                    }
-                  },
-                  child: const Text('Save Password'),
-                ),
-              ],
-            ),
+                obscureText: true,
+                onTap: (){
+                  setState(() {
+                    errorBox=Container();
+                  });
+                },
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: (){
+                  if(_currentPasswordController.text.isEmpty){
+                    setState(() {
+                      errorBox = ErrorBox(error: "Enter Current Password");
+                    });
+                  }
+                  else if(_newPasswordController.text.isEmpty){
+                    setState(() {
+                      errorBox = ErrorBox(error: "Enter New Password");
+                    });
+                  }
+                  else if(_confirmPasswordController.text.isEmpty){
+                    setState(() {
+                      errorBox = ErrorBox(error: "Enter Correct Password");
+                    });
+                  }
+                  else if(_newPasswordController.text==_currentPasswordController.text){
+                    setState(() {
+                      errorBox = ErrorBox(error: "New password cannot be same as old");
+                    });
+                  }
+                  else if(_newPasswordController.text!=_confirmPasswordController.text){
+                    setState(() {
+                      errorBox = ErrorBox(error: "Password do not match");
+                    });
+                  }
+                  else{
+                    _changePassword();
+                    context.go('/home');
+                  }
+                },
+                child: libChild,
+              ),
+            ],
           ),
         ),
       )

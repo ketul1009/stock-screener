@@ -112,13 +112,13 @@ async function login(req, res){
     var dbo = client.db('mydatabase');
     var collection = dbo.collection('users');
     var data = await collection.find({'userId':req.body.userId}).toArray();
-    if(data.length()==0){
+    if(data.length==0){
       res.send('nouser');
     }
     else if(data[0]['password']==req.body.password){
       console.log("Login successful");
       res.setHeader('Content-Type', 'text/plain');
-      res.send('true');
+      res.json({userId: req.body.userId, password: req.body.password, status: 'true'});
     }
     else{
       console.log("Login unsuccessful");
@@ -138,7 +138,7 @@ async function signup(req, res){
     var dbo = client.db('mydatabase');
     var collection = dbo.collection('users');
     var data = await collection.find({'userId':req.body.userId}).toArray();
-    if(data.length()!=0){
+    if(data.length!=0){
       res.send('unavailable');
     }
     else{
@@ -238,6 +238,37 @@ async function removeWatchlist(req, res){
         }
         await collection.updateOne({ userId }, { $set: { watchlist: currentWatchlist } });
         res.json({ success: "Updated watchlist", watchlist: currentWatchlist });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+
+async function changePassword(req, res){
+  try {
+    const userId = req.params.userId;
+
+    await client.connect();
+    const dbo = client.db('mydatabase');
+    const collection = dbo.collection('users');
+    const newPwd = req.body.password;
+
+    // Fetch the user's current watchlist
+    const user = await collection.findOne({ userId: userId});
+    if(user==null){
+      await collection.insertOne({userId: userId, watchlist: [stock]});
+      res.json({success: true, message: "Created new watchlist"});
+    }
+    else{
+      var currentWatchlist = user.watchlist || [];
+      if(!contains(currentWatchlist, stock)){
+        currentWatchlist.push(stock);
+        await collection.updateOne({ userId }, { $set: { watchlist: currentWatchlist } });
+        res.json({ success: "Updated watchlist", user: user });
+      }
+      else{
+        res.json({success: "Stock already in watchlist"})
       }
     }
   } catch (error) {
