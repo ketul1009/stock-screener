@@ -52,7 +52,7 @@ class LoginFormState extends State<LoginForm> {
       body: json.encode({'userId': email, 'password': password}),
     );
     var data = jsonDecode(res.body);
-    debugPrint(res.body);
+    debugPrint(data.toString());
     if(data['status'] == "true"){
       SharedPreferences pref =await SharedPreferences.getInstance();
       pref.setString("userId", data['userId']);
@@ -61,28 +61,30 @@ class LoginFormState extends State<LoginForm> {
       setState(() {
         _loggedIn=true;
         libChild = const Text("Log In");
-        context.go('/home');
       });
+      context.go('/home');
     }
     else{
-      if(res.body.toString() == "nouser"){
+      if(data['status'] == "nouser"){
         setState(() {
           _loggedIn=false;
           libChild = const Text("Log In");
           errorBox = ErrorBox(error: "No user found");
         });
       }
-      else if(res.body.toString() == "false"){
+      else if(data['status'] == "false"){
         setState(() {
           _loggedIn=false;
           libChild = const Text("Log In");
           errorBox = ErrorBox(error: "Invalid Credentials");
         });
       }
-      setState(() {
-        errorBox = ErrorBox(error: "Some error occurred, StatusCode: ${res.statusCode.toString()}");
-        libChild = const Text("Log In");
-      });
+      else{
+        setState(() {
+          errorBox = ErrorBox(error: "Some error occurred, StatusCode: ${res.statusCode.toString()}");
+          libChild = const Text("Log In");
+        });
+      }
     }
   }
 

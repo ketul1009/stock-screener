@@ -69,81 +69,84 @@ class ResultsPageState extends State<ResultsPage>{
       ),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-                children: [
-                  const SizedBox(width: 100,),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text("Found ${stocks.length} results", style: const TextStyle(fontSize: 20),),
-                  )
-                ]
-            ),
-            Row(
-                children: [
-                  const SizedBox(width: 80,),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: DataTable(
-                        showCheckboxColumn: false,
-                        columns: const [
-                          DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text("Change", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                        ],
-                        rows: stocks.map(
-                                (stock) => DataRow(
-                                cells: [
-                                  DataCell(
-                                    Text((serialNo++).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    Text((stock[0]).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    Text((stock[1]).toStringAsFixed(2).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    Text((stock[2]).toStringAsFixed(2).toString()),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                  DataCell(
-                                    TextButton(
-                                      onPressed: (){
-                                        if(watchlist.watchlist.contains(stock)){
-                                          ToastService.showToast(context, "Already in watchlist");
-                                        }
-                                        else{
-                                          watchlist.watchlist.add(stock);
-                                          _addToWatchlist(stock);
-                                        }
-                                      },
-                                      child: Text(watchlistButton),
-                                    ),
-                                    showEditIcon: false,
-                                    placeholder: false,
-                                  ),
-                                ]
-                            )
-                        ).toList()
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                  children: [
+                    const SizedBox(width: 100,),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Text("Found ${stocks.length} results", style: const TextStyle(fontSize: 20),),
                     )
-                  )
-                ]
-            ),
-          ],
-        ),
+                  ]
+              ),
+              Row(
+                  children: [
+                    const SizedBox(width: 80,),
+                    Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: DataTable(
+                            showCheckboxColumn: false,
+                            columns: const [
+                              DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("Change", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                            ],
+                            rows: stocks.map(
+                                    (stock) => DataRow(
+                                    cells: [
+                                      DataCell(
+                                        Text((serialNo++).toString()),
+                                        showEditIcon: false,
+                                        placeholder: false,
+                                      ),
+                                      DataCell(
+                                        Text((stock[0]).toString()),
+                                        showEditIcon: false,
+                                        placeholder: false,
+                                      ),
+                                      DataCell(
+                                        Text((stock[1]).toStringAsFixed(2).toString()),
+                                        showEditIcon: false,
+                                        placeholder: false,
+                                      ),
+                                      DataCell(
+                                        Text((stock[2]).toStringAsFixed(2).toString()),
+                                        showEditIcon: false,
+                                        placeholder: false,
+                                      ),
+                                      DataCell(
+                                        TextButton(
+                                          onPressed: (){
+                                            if(watchlist.watchlist.contains(stock)){
+                                              ToastService.showToast(context, "Already in watchlist");
+                                            }
+                                            else{
+                                              watchlist.watchlist.add(stock);
+                                              _addToWatchlist(stock);
+                                            }
+                                          },
+                                          child: Text(watchlistButton),
+                                        ),
+                                        showEditIcon: false,
+                                        placeholder: false,
+                                      ),
+                                    ]
+                                )
+                            ).toList()
+                        )
+                    )
+                  ]
+              ),
+            ],
+          ),
+        )
       )
     );
   }

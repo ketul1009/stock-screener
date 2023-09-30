@@ -47,68 +47,70 @@ class HomePageState extends State<HomePage>{
             ),
           ],
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: Image.asset('assets/images/logo.png',
-                  height: 140,),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 300,
-                    height: 300,
-                    padding: const EdgeInsets.all(10),
-                    child: Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.go("/screener");
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text("Screen", style: TextStyle(fontSize: 30),),
-                            SizedBox(height: 20,),
-                            Text("Screen stocks", style: TextStyle(fontSize: 15),),
-                          ],
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Image.asset('assets/images/logo.png',
+                    height: 140,),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 300,
+                      padding: const EdgeInsets.all(10),
+                      child: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.go("/screener");
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text("Screen", style: TextStyle(fontSize: 30),),
+                              SizedBox(height: 20,),
+                              Text("Screen stocks", style: TextStyle(fontSize: 15),),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  Container(
-                    width: 300,
-                    height: 300,
-                    padding: const EdgeInsets.all(10),
-                    child: Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          context.go("/watchlist");
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Text("Watchlist", style: TextStyle(fontSize: 30),),
-                            SizedBox(height: 20,),
-                            Text("Stocks in your watchlist", style: TextStyle(fontSize: 15),),
-                          ],
+                    const SizedBox(width: 16.0),
+                    Container(
+                      width: 300,
+                      height: 300,
+                      padding: const EdgeInsets.all(10),
+                      child: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.go("/watchlist");
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text("Watchlist", style: TextStyle(fontSize: 30),),
+                              SizedBox(height: 20,),
+                              Text("Stocks in your watchlist", style: TextStyle(fontSize: 15),),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
-        ),
+        )
       );
   }
 }

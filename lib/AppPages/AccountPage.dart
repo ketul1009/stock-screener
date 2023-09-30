@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ChangePasswordForm.dart';
 
-class AccountPage extends StatelessWidget {
-  final String username;
-  final String email;
-  final String mobile;
+class AccountPage extends StatefulWidget{
 
-  const AccountPage({super.key,
-    required this.username,
-    required this.email,
-    required this.mobile,
-  });
+  const AccountPage({super.key});
+
+
+  @override
+  AccountPageState createState() => AccountPageState();
+}
+
+class AccountPageState extends State<AccountPage> {
+  String username = "";
+
+  void _getData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('userId')!;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    _getData();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -37,14 +47,14 @@ class AccountPage extends StatelessWidget {
           children: [
             Text('Username: $username', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Code to delete account
-                // You can show a confirmation dialog before deleting
-              },
-              child: const Text('Delete Account'),
-            ),
+            // const SizedBox(height: 20),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Code to delete account
+            //     // You can show a confirmation dialog before deleting
+            //   },
+            //   child: const Text('Delete Account'),
+            // ),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {

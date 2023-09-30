@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Common/ErrorBox.dart';
+import '../Common/Toast.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({super.key});
@@ -18,8 +22,25 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget libChild = const Text("Save Password");
   Widget errorBox = Container();
 
-  void _changePassword() async {
-
+  void _changePassword(String validate, String newPwd) async {
+    SharedPreferences pref =await SharedPreferences.getInstance();
+    String? userId = pref.getString("userId");
+    String? oldPwd = pref.getString("password");
+    if(oldPwd==validate){
+      final url = Uri.parse("https://0uzp72ur4a.execute-api.ap-south-1.amazonaws.com/dev/stockscreener/changepwd");
+      var res = await http.put(
+        url,
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: json.encode({'userId': userId, 'password': newPwd}),
+      );
+      pref.setString("password", newPwd);
+      debugPrint(res.body.toString());
+    }
+    else{
+      setState(() {
+        errorBox = ErrorBox(error: "Old password not correct");
+      });
+    }
   }
 
   @override
@@ -104,7 +125,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     });
                   }
                   else{
-                    _changePassword();
+                    _changePassword(_currentPasswordController.text, _newPasswordController.text);
+                    _currentPasswordController.clear();
+                    _newPasswordController.clear();
+                    _confirmPasswordController.clear();
+                    ToastService.showToast(context, "Password changed");
                     context.go('/home');
                   }
                 },

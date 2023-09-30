@@ -38,7 +38,7 @@ Future<void> main() async {
           name: 'account',
           path: '/account',
           builder: (BuildContext context, GoRouterState state) {
-            return const AccountPage(username: "Name", email: "Email", mobile: "Mobile");
+            return const AccountPage();
           }
       ),
       GoRoute(

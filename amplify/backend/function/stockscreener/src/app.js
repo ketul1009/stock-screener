@@ -87,6 +87,11 @@ app.put('/stockscreener/removewatchlist/:userId', function(req, res) {
   //res.json({success: 'put call succeed!', url: req.url, body: req.body})
 });
 
+app.put('/stockscreener/changepwd', function(req, res) {
+  // Add your code here
+  changePassword(req, res);
+});
+
 /****************************
 * Example delete method *
 ****************************/
@@ -113,7 +118,7 @@ async function login(req, res){
     var collection = dbo.collection('users');
     var data = await collection.find({'userId':req.body.userId}).toArray();
     if(data.length==0){
-      res.send('nouser');
+      res.json({status: 'nouser'});
     }
     else if(data[0]['password']==req.body.password){
       console.log("Login successful");
@@ -123,7 +128,7 @@ async function login(req, res){
     else{
       console.log("Login unsuccessful");
       res.setHeader('Content-Type', 'text/plain');
-      res.send('false');
+      res.json({status: 'false'});
     }
   } catch (error) {
     res.send(error);
@@ -247,30 +252,15 @@ async function removeWatchlist(req, res){
 
 async function changePassword(req, res){
   try {
-    const userId = req.params.userId;
-
     await client.connect();
     const dbo = client.db('mydatabase');
     const collection = dbo.collection('users');
+    const userId = req.body.userId;
     const newPwd = req.body.password;
 
-    // Fetch the user's current watchlist
-    const user = await collection.findOne({ userId: userId});
-    if(user==null){
-      await collection.insertOne({userId: userId, watchlist: [stock]});
-      res.json({success: true, message: "Created new watchlist"});
-    }
-    else{
-      var currentWatchlist = user.watchlist || [];
-      if(!contains(currentWatchlist, stock)){
-        currentWatchlist.push(stock);
-        await collection.updateOne({ userId }, { $set: { watchlist: currentWatchlist } });
-        res.json({ success: "Updated watchlist", user: user });
-      }
-      else{
-        res.json({success: "Stock already in watchlist"})
-      }
-    }
+    await collection.updateOne({ userId }, { $set: { password: newPwd } });
+    res.send("Password changes successfully");
+
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
