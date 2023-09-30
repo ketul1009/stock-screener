@@ -36,17 +36,19 @@ class ResultsPageState extends State<ResultsPage>{
   Widget build(BuildContext context){
     WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
     Watchlist watchlist = watchlistProvider.watchlist;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final multiplier = screenWidth > 600 ? 1.0 : 0.1;
     int serialNo = 1;
     return Scaffold(
       appBar: AppBar(
         actions: [
           Padding(
-            padding: const EdgeInsets.all(5),
+            padding: EdgeInsets.all(5),
             child: Image.asset('assets/images/logo.png',
               height: 100,),
           ),
           Padding(
-              padding: const EdgeInsets.all(5),
+              padding: EdgeInsets.all(5),
               child: TextButton(
                 onPressed: (){
                   context.go("/home");
@@ -55,7 +57,7 @@ class ResultsPageState extends State<ResultsPage>{
               )
           ),
           Padding(
-            padding: const EdgeInsets.all(5),
+            padding: EdgeInsets.all(5),
             child: TextButton(
               onPressed: (){
                 context.go("/watchlist");
@@ -86,9 +88,9 @@ class ResultsPageState extends State<ResultsPage>{
               ),
               Row(
                   children: [
-                    const SizedBox(width: 80,),
+                    SizedBox(width: 80*multiplier,),
                     Padding(
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.all(20*multiplier),
                         child: DataTable(
                             showCheckboxColumn: false,
                             columns: const [

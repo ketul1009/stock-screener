@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:stock_market_filter/Common/ErrorBox.dart';
-import 'package:stock_market_filter/Models/Watchlist.dart';
 import 'package:http/http.dart' as http;
 import 'package:jumping_dot/jumping_dot.dart';
 
@@ -19,7 +17,6 @@ class FilterPage extends StatefulWidget{
 
 class FilterPageState extends State<FilterPage> {
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool drawerOpen = false;
   List<String> universe = [
     "Select stock universe",
@@ -63,7 +60,6 @@ class FilterPageState extends State<FilterPage> {
 
   void _emaCrossover(List<dynamic> stocks){
     filtered = [];
-    Watchlist temp = Watchlist([]);
     for(var stock in stocks){
       for(var key in stock.keys){
         if(stock[key]["EMA20"]>stock[key]["EMA50"]){
@@ -75,7 +71,6 @@ class FilterPageState extends State<FilterPage> {
 
   void _rsiOversold(List<dynamic> stocks){
     filtered = [];
-    Watchlist temp = Watchlist([]);
     for(var stock in stocks){
       for(var key in stock.keys){
         if(stock[key]["RSI"]<=30){
@@ -87,7 +82,6 @@ class FilterPageState extends State<FilterPage> {
 
   void _rsiOverbought(List<dynamic> stocks){
     filtered = [];
-    Watchlist temp = Watchlist([]);
     for(var stock in stocks){
       for(var key in stock.keys){
         if(stock[key]["RSI"]>=70){
@@ -100,8 +94,6 @@ class FilterPageState extends State<FilterPage> {
 
   @override
   Widget build(BuildContext context) {
-    WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
-    Watchlist watchlist = watchlistProvider.watchlist;
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -119,9 +111,10 @@ class FilterPageState extends State<FilterPage> {
         body: Center(
           child:
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              const SizedBox(height: 150,),
               SizedBox(
                 width: 200,
                 child: errorBox,

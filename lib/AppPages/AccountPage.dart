@@ -25,6 +25,8 @@ class AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final multiplier = screenWidth > 600 ? 1.0 : 0.5;
     _getData();
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +43,7 @@ class AccountPageState extends State<AccountPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(100),
+        padding: EdgeInsets.all(100*multiplier),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

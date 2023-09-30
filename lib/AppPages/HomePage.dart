@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stock_market_filter/Models/Watchlist.dart';
-import 'package:provider/provider.dart';
+// import 'package:stock_market_filter/Models/Watchlist.dart';
+// import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget{
 
 class HomePageState extends State<HomePage>{
 
-
   void _logOut() async {
     SharedPreferences pref =await SharedPreferences.getInstance();
     pref.setBool("session", false);
@@ -21,8 +20,13 @@ class HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context){
-    WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
-    Watchlist watchlist = watchlistProvider.watchlist;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final buttonWidth = screenWidth > 600 ? 300.0 : 150.0;
+    final buttonTextSize = screenWidth > 600 ? 30.0 : 15.0;
+    final multiplier = screenWidth > 600 ? 1 : 0.33;
+    // WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
+    // Watchlist watchlist = watchlistProvider.watchlist;
+    debugPrint(screenWidth.toString());
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -63,43 +67,43 @@ class HomePageState extends State<HomePage>{
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 300,
-                      height: 300,
-                      padding: const EdgeInsets.all(10),
+                      width: buttonWidth,
+                      height: buttonWidth,
+                      padding: EdgeInsets.all((10*multiplier) as double),
                       child: Padding(
-                        padding: const EdgeInsets.all(30),
+                        padding: EdgeInsets.all(30*multiplier as double),
                         child: ElevatedButton(
                           onPressed: () {
                             context.go("/screener");
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text("Screen", style: TextStyle(fontSize: 30),),
-                              SizedBox(height: 20,),
-                              Text("Screen stocks", style: TextStyle(fontSize: 15),),
+                            children: [
+                              Text("Screen", style: TextStyle(fontSize: buttonTextSize),),
+                              SizedBox(height: 20*multiplier as double,),
+                              Text("Screen stocks", style: TextStyle(fontSize: buttonTextSize/1.5),),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16.0),
-                    Container(
-                      width: 300,
-                      height: 300,
-                      padding: const EdgeInsets.all(10),
+                    SizedBox(width: 16.0*multiplier),
+                    Container (
+                      width: buttonWidth,
+                      height: buttonWidth,
+                      padding: EdgeInsets.all(10*multiplier as double),
                       child: Padding(
-                        padding: const EdgeInsets.all(30),
+                        padding: EdgeInsets.all(30*multiplier as double),
                         child: ElevatedButton(
                           onPressed: () {
                             context.go("/watchlist");
                           },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text("Watchlist", style: TextStyle(fontSize: 30),),
-                              SizedBox(height: 20,),
-                              Text("Stocks in your watchlist", style: TextStyle(fontSize: 15),),
+                            children: [
+                              Text("Watchlist", style: TextStyle(fontSize: buttonTextSize),),
+                              SizedBox(height: 20*multiplier as double),
+                              Text("Stocks in watchlist", style: TextStyle(fontSize: buttonTextSize/1.5),),
                             ],
                           ),
                         ),

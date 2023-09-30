@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jumping_dot/jumping_dot.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_market_filter/Models/Watchlist.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +17,11 @@ class WatchlistPage extends StatefulWidget{
 class WatchlistPageState extends State<WatchlistPage>{
 
   List<dynamic> stocks = [];
+  Widget title = JumpingDots(
+      color: Colors.white,
+      radius: 5,
+      numberOfDots: 3,
+    );
   @override
   void initState() {
     _getWatchlist();
@@ -32,6 +38,7 @@ class WatchlistPageState extends State<WatchlistPage>{
     var data = json.decode(res.body);
     setState(() {
       stocks = data['watchlist'];
+      title = Text("${stocks.length} in watchlist", style: const TextStyle(fontSize: 20),);
     });
   }
 
@@ -49,6 +56,8 @@ class WatchlistPageState extends State<WatchlistPage>{
   Widget build(BuildContext context){
     WatchlistProvider watchlistProvider = context.watch<WatchlistProvider>();
     Watchlist watchlist = watchlistProvider.watchlist;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final multiplier = screenWidth > 600 ? 1.0 : 0.1;
     int serialNo = 1;
     return Scaffold(
         appBar: AppBar(
@@ -82,85 +91,88 @@ class WatchlistPageState extends State<WatchlistPage>{
         ),
         resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                  children: [
-                    const SizedBox(width: 100,),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Text("${stocks.length} in watchlist", style: const TextStyle(fontSize: 20),),
-                    )
-                  ]
-              ),
-              Row(
-                  children: [
-                    const SizedBox(width: 80,),
-                    Padding(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                    children: [
+                      const SizedBox(width: 100,),
+                      Padding(
                         padding: const EdgeInsets.all(20),
-                        child: DataTable(
-                            showCheckboxColumn: false,
-                            columns: const [
-                              DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                              DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                              DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                              DataColumn(label: Text("Change", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                              DataColumn(label: Text("Strategy", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                              DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
-                            ],
-                            rows: stocks.map(
-                                    (stock) {
-                                  return DataRow(
-                                      cells: [
-                                        DataCell(
-                                          Text((serialNo++).toString()),
-                                          showEditIcon: false,
-                                          placeholder: false,
-                                        ),
-                                        DataCell(
-                                          Text((stock[0]).toString()),
-                                          showEditIcon: false,
-                                          placeholder: false,
-                                        ),
-                                        DataCell(
-                                          Text((stock[1]).toStringAsFixed(2).toString()),
-                                          showEditIcon: false,
-                                          placeholder: false,
-                                        ),
-                                        DataCell(
-                                          Text((stock[2]).toStringAsFixed(2).toString()),
-                                          showEditIcon: false,
-                                          placeholder: false,
-                                        ),
-                                        DataCell(
-                                          Text((stock[3])),
-                                          showEditIcon: false,
-                                          placeholder: false,
-                                        ),
-                                        DataCell(
-                                          TextButton(
-                                            onPressed: (){
-                                              watchlist.watchlist.remove(stock);
-                                              stocks.remove(stock);
-                                              _removeFromWatchlist(stock);
-                                              watchlistProvider.setWatchlist(watchlist);
-                                            },
-                                            child: const Text("Remove from Watchlist"),
+                        child: title
+                      )
+                    ]
+                ),
+                Row(
+                    children: [
+                      SizedBox(width: 80*multiplier,),
+                      Padding(
+                          padding: EdgeInsets.all(20*multiplier),
+                          child: DataTable(
+                              showCheckboxColumn: false,
+                              columns: const [
+                                DataColumn(label: Text("Sr. No", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                                DataColumn(label: Text("Stock", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                                DataColumn(label: Text("LTP", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                                DataColumn(label: Text("Change", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                                DataColumn(label: Text("Strategy", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                                DataColumn(label: Text("", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))),
+                              ],
+                              rows: stocks.map(
+                                      (stock) {
+                                    return DataRow(
+                                        cells: [
+                                          DataCell(
+                                            Text((serialNo++).toString()),
+                                            showEditIcon: false,
+                                            placeholder: false,
                                           ),
-                                          showEditIcon: false,
-                                          placeholder: false,
-                                        ),
-                                      ]
-                                  );
-                                }
-                            ).toList()
-                        )
-                    )
-                  ]
-              ),
-            ],
+                                          DataCell(
+                                            Text((stock[0]).toString()),
+                                            showEditIcon: false,
+                                            placeholder: false,
+                                          ),
+                                          DataCell(
+                                            Text((stock[1]).toStringAsFixed(2).toString()),
+                                            showEditIcon: false,
+                                            placeholder: false,
+                                          ),
+                                          DataCell(
+                                            Text((stock[2]).toStringAsFixed(2).toString()),
+                                            showEditIcon: false,
+                                            placeholder: false,
+                                          ),
+                                          DataCell(
+                                            Text((stock[3])),
+                                            showEditIcon: false,
+                                            placeholder: false,
+                                          ),
+                                          DataCell(
+                                            TextButton(
+                                              onPressed: (){
+                                                watchlist.watchlist.remove(stock);
+                                                stocks.remove(stock);
+                                                _removeFromWatchlist(stock);
+                                                watchlistProvider.setWatchlist(watchlist);
+                                              },
+                                              child: const Text("Remove from Watchlist"),
+                                            ),
+                                            showEditIcon: false,
+                                            placeholder: false,
+                                          ),
+                                        ]
+                                    );
+                                  }
+                              ).toList()
+                          )
+                      )
+                    ]
+                ),
+              ],
+            ),
           ),
         )
     );

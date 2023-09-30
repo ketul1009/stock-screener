@@ -259,10 +259,10 @@ async function changePassword(req, res){
     const newPwd = req.body.password;
 
     await collection.updateOne({ userId }, { $set: { password: newPwd } });
-    res.send("Password changes successfully");
+    res.json({status: "true"});
 
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ status: "false", error: error.message });
   }
 }
 
